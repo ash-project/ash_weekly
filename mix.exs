@@ -8,6 +8,7 @@ defmodule AshWeekly.MixProject do
       elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: Mix.env() != :dev,
+      aliases: aliases(),
       deps: deps()
     ]
   end
@@ -16,6 +17,21 @@ defmodule AshWeekly.MixProject do
   def application do
     [
       extra_applications: [:logger]
+    ]
+  end
+
+  defp aliases() do
+    [
+      "ash_weekly.report": fn _ ->
+        Mix.Task.run("compile")
+        Mix.Task.run("app.start")
+        AshWeekly.report()
+      end,
+      "ash_weekly.open_all": fn _ ->
+        Mix.Task.run("compile")
+        Mix.Task.run("app.start")
+        AshWeekly.open_all()
+      end
     ]
   end
 

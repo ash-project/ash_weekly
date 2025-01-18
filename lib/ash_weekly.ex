@@ -23,5 +23,7 @@ defmodule AshWeekly do
       "# #{repo}\n\n#{changes}"
     end)
     |> then(&File.write!("report.md", &1))
+
+    IO.puts("Report can be found at ./report.md")
   end
 end
