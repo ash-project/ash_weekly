@@ -38,6 +38,8 @@ defmodule AshWeekly.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:timex, "~> 3.0"},
+      {:sweet_xml, "~> 0.7"},
       {:req, "~> 0.5"},
       {:igniter, "~> 0.5", only: [:dev, :test]}
       # {:dep_from_hexpm, "~> 0.3.0"},
