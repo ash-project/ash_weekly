@@ -72,12 +72,14 @@ defmodule AshWeekly do
     |> Enum.map(&String.trim/1)
     |> Enum.reject(&(&1 == ""))
     |> Enum.join("\n")
+    |> Kernel.<>(
+      "\nNow go to the `ash-weekly` discord channel and check for any updates since the last ash-weekly post"
+    )
+    |> Kernel.<>("\nPost to reddit.com/r/elixir")
+    |> Kernel.<>("\nPost to https://elixirforum.com/t/ash-weekly-newsletter/68818")
+    |> Kernel.<>("\nPost to discord")
     |> then(&File.write!("report.md", &1))
 
-    IO.puts("Report can be found at ./report.md")
-
-    IO.puts(
-      "Now go to the `ash-weekly` discord channel and check for any updates since the last ash-weekly post"
-    )
+    IO.puts("'./report.md` created")
   end
 end
