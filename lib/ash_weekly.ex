@@ -14,6 +14,7 @@ defmodule AshWeekly do
     "team-alembic/ash_authentication",
     "team-alembic/ash_authentication_phoenix",
     "ash-project/ash_postgres",
+    "ash-project/ash_sql",
     "ash-project/ash_sqlite",
     "ash-project/ash_csv",
     "ash-project/ash_admin",
