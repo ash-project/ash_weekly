@@ -80,7 +80,7 @@ defmodule AshWeekly do
       Don't forget :)
 
 
-      """
+      """ <> str
     end)
     |> Kernel.<>(
       "\nNow go to the `ash-weekly` discord channel and check for any updates since the last ash-weekly post"
