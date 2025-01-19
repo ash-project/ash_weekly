@@ -72,6 +72,16 @@ defmodule AshWeekly do
     |> Enum.map(&String.trim/1)
     |> Enum.reject(&(&1 == ""))
     |> Enum.join("\n")
+    |> then(fn str ->
+      """
+      For any versions published on the same day as the last newsletter, 
+      you'll have to manually check if they were included in the last newsletter!
+
+      Don't forget :)
+
+
+      """
+    end)
     |> Kernel.<>(
       "\nNow go to the `ash-weekly` discord channel and check for any updates since the last ash-weekly post"
     )
