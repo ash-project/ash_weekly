@@ -14,7 +14,7 @@ defmodule AshWeekly.Changelog do
           [_, date_str] ->
             case Date.from_iso8601(date_str) do
               {:ok, date} ->
-                Date.compare(date, as_of) == :gt
+                Date.compare(date, as_of) == [:gt, :eq]
 
               _ ->
                 false
