@@ -36,24 +36,20 @@ defmodule AshWeekly do
   end
 
   def report do
-    rss_url = "https://ashweekly.substack.com/feed.rss"
-    {:ok, %{body: rss_body}} = Req.get(rss_url)
-    import SweetXml
+    one_week_ago = Date.shift(Date.utc_today(), day: -7)
 
     latest_date =
-      rss_body
-      |> xpath(~x"//item/pubDate/text()"l)
-      |> Enum.map(&List.to_string/1)
-      |> Enum.map(&Timex.parse!(&1, "{RFC1123}"))
-      |> Enum.max(Timex.Comparable)
-      |> case do
-        ~U[2025-01-18 17:14:45Z] ->
-          DateTime.shift(DateTime.utc_now(), day: -7)
+      case String.trim(
+             Mix.shell().prompt(
+               "When was the last newsletter? Default: #{one_week_ago}. YYYY-MM-DD"
+             )
+           ) do
+        "" ->
+          one_week_ago
 
         date ->
-          date
+          Timex.parse(date, "{YYYY}-{0M}-{0D}")
       end
-      |> DateTime.to_date()
 
     @repos
     |> Enum.map_join("\n\n", fn repo ->
