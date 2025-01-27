@@ -27,6 +27,11 @@ defmodule AshWeekly.MixProject do
         Mix.Task.run("app.start")
         AshWeekly.report()
       end,
+      "ash_weekly.check_for_releases": fn _ ->
+        Mix.Task.run("compile")
+        Mix.Task.run("app.start")
+        AshWeekly.check_for_releases()
+      end,
       "ash_weekly.open_all": fn _ ->
         Mix.Task.run("compile")
         Mix.Task.run("app.start")

@@ -31,6 +31,66 @@ defmodule AshWeekly do
     "ash-project/iterex"
   ]
 
+  def check_for_releases do
+    @repos
+    |> Task.async_stream(
+      fn repo ->
+        [_org, project] = String.split(repo, "/")
+
+        dir = "../#{project}"
+
+        if !File.exists?(dir) do
+          System.cmd("gh", ["repo", "clone", repo],
+            cd: "..",
+            stderr_to_stdout: true
+          )
+        end
+
+        case System.cmd("git", ["status", "-s", "--porcelain"],
+               stderr_to_stdout: true,
+               cd: dir
+             ) do
+          {"", _} ->
+            System.cmd("git", ["checkout", "main", "--porcelain"],
+              cd: dir,
+              stderr_to_stdout: true
+            )
+
+            System.cmd("git", ["pull", "origin", "main", "--porcelain"],
+              cd: dir,
+              stderr_to_stdout: true
+            )
+
+            System.cmd("mix", ["deps.get"], cd: dir, stderr_to_stdout: true)
+
+            case System.cmd("mix", ["git_ops.release", "--dry-run"],
+                   cd: dir,
+                   stderr_to_stdout: true
+                 ) do
+              {output, _} ->
+                if String.contains?(
+                     output,
+                     "No changes should result in a new release version."
+                   ) do
+                  IO.ANSI.format([:green, project, " - No Release", :reset])
+                  |> Mix.shell().info()
+                else
+                  IO.ANSI.format([:yellow, project, " - Release", :reset])
+                  |> Mix.shell().info()
+                end
+            end
+
+          _ ->
+            IO.ANSI.format([:red, project, " - Has local changes", :reset])
+            |> Mix.shell().info()
+        end
+      end,
+      timeout: :infinity,
+      max_concurrency: 16
+    )
+    |> Stream.run()
+  end
+
   def open_all do
     Enum.each(@repos, &System.cmd("open", ["https://github.com/#{&1}"]))
   end
