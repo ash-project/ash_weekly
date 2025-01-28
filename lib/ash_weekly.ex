@@ -56,10 +56,11 @@ defmodule AshWeekly do
               stderr_to_stdout: true
             )
 
-            System.cmd("git", ["pull", "origin", "main", "--porcelain"],
-              cd: dir,
-              stderr_to_stdout: true
-            )
+            {_, 0} =
+              System.cmd("git", ["pull", "origin", "main", "--porcelain"],
+                cd: dir,
+                stderr_to_stdout: true
+              )
 
             System.cmd("mix", ["deps.get"], cd: dir, stderr_to_stdout: true)
 
@@ -68,13 +69,10 @@ defmodule AshWeekly do
                    stderr_to_stdout: true
                  ) do
               {output, _} ->
-                if String.contains?(
+                if !String.contains?(
                      output,
                      "No changes should result in a new release version."
                    ) do
-                  IO.ANSI.format([:green, project, " - No Release", :reset])
-                  |> Mix.shell().info()
-                else
                   IO.ANSI.format([:yellow, project, " - Release", :reset])
                   |> Mix.shell().info()
                 end
