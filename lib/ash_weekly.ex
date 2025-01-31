@@ -106,7 +106,7 @@ defmodule AshWeekly do
           one_week_ago
 
         date ->
-          Timex.parse(date, "{YYYY}-{0M}-{0D}")
+          Timex.parse!(date, "{YYYY}-{0M}-{0D}")
       end
 
     @repos
