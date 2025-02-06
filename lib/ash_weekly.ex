@@ -31,6 +31,7 @@ defmodule AshWeekly do
     "ash-project/iterex",
     "jimsynz/ash_cubdb",
     "jimsynz/smokestack",
+    "jimsynz/reactor_process",
     "jimsynz/reactor_req",
     "jimsynz/reactor_file"
   ]
