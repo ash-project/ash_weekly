@@ -28,7 +28,9 @@ defmodule AshWeekly do
     "ash-project/ash_double_entry",
     "ash-project/ash_phoenix",
     "ash-project/ash_slug",
-    "ash-project/iterex"
+    "ash-project/iterex",
+    "jimsynz/reactor_file",
+    "jimsynz/reactor_req"
   ]
 
   def check_for_releases do
@@ -36,7 +38,6 @@ defmodule AshWeekly do
     |> Task.async_stream(
       fn repo ->
         [_org, project] = String.split(repo, "/")
-
         dir = "../#{project}"
 
         if !File.exists?(dir) do
@@ -57,7 +58,7 @@ defmodule AshWeekly do
             )
 
             {_, 0} =
-              System.cmd("git", ["pull", "origin", "main", "--porcelain"],
+              System.cmd("git", ["pull", "origin", "main"],
                 cd: dir,
                 stderr_to_stdout: true
               )
@@ -84,7 +85,7 @@ defmodule AshWeekly do
         end
       end,
       timeout: :infinity,
-      max_concurrency: 16
+      max_concurrency: 1
     )
     |> Stream.run()
   end
@@ -110,22 +111,23 @@ defmodule AshWeekly do
       end
 
     @repos
-    |> Enum.map_join("\n\n", fn repo ->
+    |> Enum.map_join("\n\n\n", fn repo ->
       url = "https://raw.githubusercontent.com/#{repo}/main/CHANGELOG.md"
 
       text = Req.get!(url).body
-      changes = AshWeekly.Changelog.parse_changelog(text, latest_date)
+
+      changes =
+        AshWeekly.Changelog.parse_changelog(text, latest_date)
+        |> String.split("\n")
+        |> Enum.reject(&(&1 == ""))
+        |> Enum.join("\n")
 
       if String.trim(changes) == "" do
         ""
       else
-        "# #{repo}\n\n#{changes}"
+        "# #{repo}\n#{changes}"
       end
     end)
-    |> String.split("\n")
-    |> Enum.map(&String.trim/1)
-    |> Enum.reject(&(&1 == ""))
-    |> Enum.join("\n")
     |> then(fn str ->
       """
       For any versions published on the same day as the last newsletter, 
