@@ -28,10 +28,7 @@ defmodule AshWeekly do
     "ash-project/ash_double_entry",
     "ash-project/ash_phoenix",
     "ash-project/ash_slug",
-    "ash-project/iterex",
-    "jimsynz/reactor_file",
-    "jimsynz/reactor_req",
-    "jimsynz/reactor_process"
+    "ash-project/iterex"
   ]
 
   def check_for_releases do
