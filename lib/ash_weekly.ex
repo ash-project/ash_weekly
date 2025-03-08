@@ -24,6 +24,7 @@ defmodule AshWeekly do
     "ash-project/ash_cloak",
     "ash-project/ash_money",
     "ash-project/ash_oban",
+    "ash-project/ash_state_machine",
     "ash-project/ash_paper_trail",
     "ash-project/ash_double_entry",
     "ash-project/ash_phoenix",
