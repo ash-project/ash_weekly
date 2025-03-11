@@ -8,6 +8,7 @@ defmodule AshWeekly do
     "ash-project/reactor",
     "ash-project/igniter",
     "ash-project/spark",
+    "ash-project/ash_ops",
     "ash-project/splode",
     "ash-project/ash_graphql",
     "ash-project/ash_json_api",
