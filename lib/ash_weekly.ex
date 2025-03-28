@@ -85,7 +85,7 @@ defmodule AshWeekly do
         end
       end,
       timeout: :infinity,
-      max_concurrency: 1
+      max_concurrency: 16
     )
     |> Stream.run()
   end
