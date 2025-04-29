@@ -30,7 +30,11 @@ defmodule AshWeekly do
     "ash-project/ash_double_entry",
     "ash-project/ash_phoenix",
     "ash-project/ash_slug",
-    "ash-project/iterex"
+    "ash-project/iterex",
+    "jimsynz/ash_cubdb",
+    "jimsynz/smokestack",
+    "jimsynz/reactor_req",
+    "jimsynz/reactor_file"
   ]
 
   def check_for_releases do
@@ -130,7 +134,7 @@ defmodule AshWeekly do
     end)
     |> then(fn str ->
       """
-      For any versions published on the same day as the last newsletter, 
+      For any versions published on the same day as the last newsletter,
       you'll have to manually check if they were included in the last newsletter!
 
       Don't forget :)
