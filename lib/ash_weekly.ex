@@ -6,6 +6,7 @@ defmodule AshWeekly do
   @repos [
     "ash-project/ash",
     "ash-project/reactor",
+    "ash-project/ash_ai",
     "ash-project/igniter",
     "ash-project/spark",
     "ash-project/ash_ops",
