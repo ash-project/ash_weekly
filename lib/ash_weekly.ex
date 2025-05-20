@@ -35,6 +35,17 @@ defmodule AshWeekly do
     "ash-project/iterex"
   ]
 
+  def llms_txt() do
+    @repos
+    |> Enum.map(fn repo ->
+      String.split(repo, "/") |> Enum.at(1)
+    end)
+    |> Enum.map_join("\n", fn package ->
+      Req.get!("https://hex2txt.fly.dev/#{package}/llms.txt").body
+    end)
+    |> then(&File.write("llms.txt", &1))
+  end
+
   def check_for_releases do
     @repos
     |> Task.async_stream(
