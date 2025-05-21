@@ -1,8 +1,4 @@
 defmodule AshWeekly do
-  @moduledoc """
-  Documentation for `AshWeekly`.
-  """
-
   @repos [
     "ash-project/ash",
     "ash-project/reactor",
@@ -149,7 +145,6 @@ defmodule AshWeekly do
       Don't forget :)
 
       Also, add next office hours link in advance.
-
 
       """ <> str
     end)
