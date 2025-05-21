@@ -33,6 +33,10 @@ defmodule AshWeekly.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:sourceror, "~> 1.8", only: [:dev, :test]},
+      {:ash_ai, "~> 0.1"},
+      {:ash, "~> 3.0"},
+      {:tidewave, "~> 0.1", only: [:dev]},
       {:phoenix, "~> 1.8.0-rc.3", override: true},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.10"},

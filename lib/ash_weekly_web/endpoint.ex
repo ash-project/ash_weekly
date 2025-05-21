@@ -26,9 +26,20 @@ defmodule AshWeeklyWeb.Endpoint do
     gzip: not code_reloading?,
     only: AshWeeklyWeb.static_paths()
 
+  if Code.ensure_loaded?(Tidewave) do
+    plug Tidewave
+  end
+
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
+    plug AshAi.Mcp.Dev,
+      # If using mcp-remote, and this issue is not fixed yet: https://github.com/geelen/mcp-remote/issues/66
+      # You will need to set the `protocol_version_statement` to the
+      # older version.
+      protocol_version_statement: "2024-11-05",
+      otp_app: :ash_weekly
+
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
