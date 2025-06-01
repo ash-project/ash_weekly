@@ -19,6 +19,7 @@ defmodule AshWeekly do
     "ash-project/ash_appsignal",
     "ash-project/opentelemetry_ash",
     "ash-project/ash_archival",
+    "ash-project/ash_rate_limiter",
     "ash-project/ash_cloak",
     "ash-project/ash_money",
     "ash-project/ash_oban",
