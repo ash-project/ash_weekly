@@ -1,11 +1,12 @@
 defmodule AshWeekly do
   @repos [
     "ash-project/ash",
+    "ash-project/ash_ai",
+    "ash-project/usage_rules",
     "ash-project/reactor",
     "ash-project/reactor_req",
     "ash-project/reactor_file",
     "ash-project/reactor_process",
-    "ash-project/ash_ai",
     "ash-project/igniter",
     "ash-project/spark",
     "ash-project/ash_ops",
@@ -158,6 +159,9 @@ defmodule AshWeekly do
     |> Kernel.<>("\nPost to reddit.com/r/elixir")
     |> Kernel.<>("\nPost to https://elixirforum.com/t/ash-weekly-newsletter/68818")
     |> Kernel.<>("\nPost to discord")
+    |> Kernel.<>("\nPost to alembic slack")
+    |> Kernel.<>("\nPost to slack")
+    |> Kernel.<>("\nPost to linkedin")
     |> then(&File.write!("report.md", &1))
 
     IO.puts("'./report.md` created")
