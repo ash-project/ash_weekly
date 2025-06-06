@@ -2,6 +2,9 @@ defmodule AshWeekly do
   @repos [
     "ash-project/ash",
     "ash-project/reactor",
+    "ash-project/reactor_req",
+    "ash-project/reactor_file",
+    "ash-project/reactor_process",
     "ash-project/ash_ai",
     "ash-project/igniter",
     "ash-project/spark",
