@@ -3,18 +3,18 @@ defmodule AshWeekly do
     "ash-project/ash",
     "ash-project/ash_ai",
     "ash-project/usage_rules",
-    "ash-project/reactor",
-    "ash-project/reactor_req",
-    "ash-project/reactor_file",
-    "ash-project/reactor_process",
+    # "ash-project/reactor",
+    # "ash-project/reactor_req",
+    # "ash-project/reactor_file",
+    # "ash-project/reactor_process",
     "ash-project/igniter",
     "ash-project/spark",
     "ash-project/ash_ops",
     "ash-project/splode",
     "ash-project/ash_graphql",
     "ash-project/ash_json_api",
-    "team-alembic/ash_authentication",
-    "team-alembic/ash_authentication_phoenix",
+    # "team-alembic/ash_authentication",
+    # "team-alembic/ash_authentication_phoenix",
     "ash-project/ash_postgres",
     "ash-project/ash_sql",
     "ash-project/ash_sqlite",
@@ -106,6 +106,92 @@ defmodule AshWeekly do
 
   def open_all do
     Enum.each(@repos, &System.cmd("open", ["https://github.com/#{&1}"]))
+  end
+
+  def update_dependabot_schedule(repos \\ @repos) do
+    repos
+    |> Task.async_stream(
+      fn repo ->
+        [_org, project] = String.split(repo, "/")
+        dir = "../#{project}"
+
+        if !File.exists?(dir) do
+          System.cmd("gh", ["repo", "clone", repo],
+            cd: "..",
+            stderr_to_stdout: true
+          )
+        end
+
+        case System.cmd("git", ["status", "-s", "--porcelain"],
+               stderr_to_stdout: true,
+               cd: dir
+             ) do
+          {"", _} ->
+            System.cmd("git", ["checkout", "main"],
+              cd: dir,
+              stderr_to_stdout: true
+            )
+
+            {_, 0} =
+              System.cmd("git", ["pull", "origin", "main"],
+                cd: dir,
+                stderr_to_stdout: true
+              )
+
+            dependabot_path = Path.join(dir, ".github/dependabot.yml")
+
+            if File.exists?(dependabot_path) do
+              content = File.read!(dependabot_path)
+              parsed = YamlElixir.read_from_string!(content)
+
+              updated_content =
+                parsed
+                |> put_in(
+                  ["updates"],
+                  Enum.map(parsed["updates"] || [], fn update ->
+                    put_in(update, ["schedule", "interval"], "monthly")
+                  end)
+                )
+
+              yaml_content = Ymlr.document!(updated_content)
+              File.write!(dependabot_path, yaml_content)
+
+              {output, _} = System.cmd("git", ["diff", "--name-only"], cd: dir)
+
+              if String.contains?(output, "dependabot.yml") do
+                System.cmd("git", ["add", ".github/dependabot.yml"], cd: dir)
+
+                System.cmd("git", ["commit", "-m", "Update dependabot schedule to monthly"],
+                  cd: dir
+                )
+
+                System.cmd("git", ["push", "origin", "main"], cd: dir)
+
+                IO.ANSI.format([
+                  :green,
+                  project,
+                  " - Updated dependabot schedule to monthly and pushed",
+                  :reset
+                ])
+                |> Mix.shell().info()
+              else
+                IO.ANSI.format([:yellow, project, " - Dependabot already set to monthly", :reset])
+                |> Mix.shell().info()
+              end
+            else
+              IO.ANSI.format([:yellow, project, " - No dependabot.yml found, skipping", :reset])
+              |> Mix.shell().info()
+            end
+
+          _ ->
+            IO.ANSI.format([:red, project, " - Has local changes, skipping", :reset])
+            |> Mix.shell().info()
+        end
+      end,
+      timeout: :infinity,
+      max_concurrency: 16
+    )
+    |> Stream.run()
   end
 
   def report do
