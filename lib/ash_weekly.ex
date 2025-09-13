@@ -2,6 +2,7 @@ defmodule AshWeekly do
   @repos [
     "ash-project/ash",
     "ash-project/ash_ai",
+    "ash-project/ash_typescript",
     "ash-project/usage_rules",
     "ash-project/reactor",
     "ash-project/reactor_req",
