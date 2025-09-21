@@ -1,5 +1,5 @@
 defmodule AshWeekly.Changelog do
-  @header_regex ~r/## \[.*?\]\(.*?\) \((\d{4}-\d{2}-\d{2})\)/
+  @header_regex ~r/## (?:\[.*?\]\(.*?\)|v\d+\.\d+\.\d+) \((\d{4}-\d{2}-\d{2})\)/
 
   def parse_changelog(content, as_of) do
     [_content, content] = String.split(content, "<!-- changelog -->", parts: 2)
